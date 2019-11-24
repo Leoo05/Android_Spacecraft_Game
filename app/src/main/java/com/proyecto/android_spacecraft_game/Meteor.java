@@ -3,6 +3,7 @@ package com.proyecto.android_spacecraft_game;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 
 import java.util.Random;
 
@@ -21,16 +22,18 @@ public class Meteor {
     private float positionX;
     private float positionY;
     private Bitmap spriteMeteor;
-    private boolean isJumping;
+    private Bitmap spriteMeteor2;
+    private boolean isAlive;
 
 
     public Meteor(Context context, float screenWidth, float screenHeigth){
 
         speed = 0.09F;
-        isJumping = false;
+        isAlive = false;
         //Getting bitmap from resource
         Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.meteoro);
         spriteMeteor = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
+        spriteMeteor2 = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         this.maxX = screenWidth;
         this.maxY = screenHeigth - spriteMeteor.getHeight();
         positionX = this.maxX + spriteMeteor.getWidth();
@@ -87,12 +90,12 @@ public class Meteor {
         this.spriteMeteor = spriteMeteor;
     }
 
-    public boolean isJumping() {
-        return isJumping;
+    public boolean isAlive() {
+        return isAlive;
     }
 
-    public void setJumping(boolean jumping) {
-        isJumping = jumping;
+    public void setAlive(boolean alive) {
+        isAlive = alive;
     }
 
     /**
@@ -102,11 +105,18 @@ public class Meteor {
         if (speed > MAX_SPEED) {
             speed = MAX_SPEED;
         }
+        if(!isAlive){
+            Bitmap destroyed = getSpriteMeteor();
+            destroyed.eraseColor(Color.TRANSPARENT);
+            setSpriteMeteor(destroyed);
+        }
         if (speed < MIN_SPEED || speed ==0) {
             speed = MIN_SPEED;
         }
         this.positionX -= speed;
         if (positionX < 0) {
+            isAlive=true;
+            setSpriteMeteor(spriteMeteor2);
             Random rnd = new Random();
             positionX = maxX+SPRITE_SIZE_WIDTH;
             positionY =(float) rnd.nextInt((int) maxY);
@@ -130,7 +140,4 @@ public class Meteor {
         return false;
     }
 
-    public void destroyMeteor(){
-        //Ponga aqui lo que sea para destruirlos o volver a empezar
-    }
 }

@@ -29,19 +29,24 @@ public class GameManager {
 
     public void checkDetroyEnemy(){
         if(playerShot.checkMeteorColition(m1)){
-            m1.destroyMeteor();
+            m1.setAlive(false);
+            player.setScore(player.getScore()+15);
         }
         if(playerShot.checkMeteorColition(m2)) {
-            m2.destroyMeteor();
+            m2.setAlive(false);
+            player.setScore(player.getScore()+15);
         }
         if(playerShot.checkMeteorColition(m3)){
-            m3.destroyMeteor();
+            m3.setAlive(false);
+            player.setScore(player.getScore()+15);
         }
         if(playerShot.checkEnemyShipColition(e1)){
-            e1.destroyEnemyShip();
+            e1.setAlive(false);
+            player.setScore(player.getScore()+15);
         }
         if(playerShot.checkEnemyShipColition(e2)){
-            e2.destroyEnemyShip();
+            e2.setAlive(false);
+            player.setScore(player.getScore()+15);
         }
     }
 

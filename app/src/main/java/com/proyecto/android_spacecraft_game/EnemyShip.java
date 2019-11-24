@@ -3,6 +3,7 @@ package com.proyecto.android_spacecraft_game;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 
 import java.util.Random;
 
@@ -21,15 +22,19 @@ public class EnemyShip {
     private float positionX;
     private float positionY;
     private Bitmap spriteEnemyShip;
-    private boolean isJumping;
+    private Bitmap spriteEnemyShip2;
+    private boolean isAlive;
+    private Context context;
 
 
     public EnemyShip(Context context, float screenWidth, float screenHeigth){
         speed = 0.09F;
-        isJumping = false;
+        isAlive = true;
+        this.context = context;
         //Getting bitmap from resource
         Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo2);
         spriteEnemyShip = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
+        spriteEnemyShip2 = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         this.maxX = screenWidth;
         this.maxY = screenHeigth - spriteEnemyShip.getHeight();
         positionX = this.maxX + spriteEnemyShip.getWidth();
@@ -84,12 +89,12 @@ public class EnemyShip {
         this.spriteEnemyShip = spriteEnemyShip;
     }
 
-    public boolean isJumping() {
-        return isJumping;
+    public boolean isAlive() {
+        return isAlive;
     }
 
-    public void setJumping(boolean jumping) {
-        isJumping = jumping;
+    public void setAlive(boolean alive) {
+        isAlive = alive;
     }
 
     /**
@@ -99,15 +104,23 @@ public class EnemyShip {
         if (speed > MAX_SPEED) {
             speed = MAX_SPEED;
         }
+
         if (speed < MIN_SPEED || speed ==0) {
             speed = MIN_SPEED;
         }
         this.positionX -= speed;
         if (positionX < 0) {
+            isAlive = true;
             Random rnd = new Random();
             positionX = maxX+SPRITE_SIZE_WIDTH;
             positionY =(float) rnd.nextInt((int) maxY);
+            setSpriteEnemyShip(spriteEnemyShip2);
             speed=rnd.nextInt(8);
+        }
+        if(!isAlive){
+            Bitmap destroyed = getSpriteEnemyShip();
+            destroyed.eraseColor(Color.TRANSPARENT);
+            setSpriteEnemyShip(destroyed);
         }
         if (positionY < 0) {
             positionY = 0;
@@ -128,6 +141,6 @@ public class EnemyShip {
     }
 
     public void destroyEnemyShip(){
-        //Ponga aqui lo que sea para destruirlos o volver a empezar
+
     }
 }

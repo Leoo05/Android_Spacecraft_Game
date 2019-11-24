@@ -51,6 +51,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         e2 = new EnemyShip(context, screenWidth, screenHeight);
         enemyShot = new EnemyShot(context, screenWidth, screenHeight, e1);
         enemyShot2 = new EnemyShot(context, screenWidth, screenHeight, e2);
+        playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);
         gameManager = new GameManager(m1, m2, m3, e1, e2, enemyShot, enemyShot2, player, playerShot);
         holder = getHolder();
         paint = new Paint();
@@ -64,11 +65,29 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (isPlaying) {
+            checkCollision();
             updateInfo();
             paintFrame();
+
         }
     }
-
+    private void checkCollision(){
+        if(playerShot.checkEnemyShipColition(e1)) {
+            e1.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+        }
+        if(playerShot.checkEnemyShipColition(e2)) {
+            e2.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+        }
+        if(playerShot.checkMeteorColition(m1)){
+            m1.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+        }
+        if(playerShot.checkMeteorColition(m2)) {
+            m2.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+        }
+        if(playerShot.checkMeteorColition(m3)) {
+            m3.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+        }
+    }
     private void updateInfo() {
         player.updateInfo();
         m1.updateInfo();
@@ -137,11 +156,15 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
                 System.out.println("TOUCH DOWN - JUMP");
                 player.setJumping(true);
+                if(!playerShot.isActive()){
+                    playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);
+                    playerShot.setActive(true);
+                    canvas.drawBitmap(playerShot.getSpritePlayerShot(), playerShot.getPositionX(), player.getPositionY(), paint);
+                }else{
+
+                }
+
                 break;
-            case MotionEvent.ACTION_BUTTON_PRESS:
-                System.out.println("SHOOT");
-                playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);
-                canvas.drawBitmap(playerShot.getSpritePlayerShot(), playerShot.getPositionX(), enemyShot2.getPositionY(), paint);
         }
         return true;
     }

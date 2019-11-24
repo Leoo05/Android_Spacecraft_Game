@@ -3,6 +3,7 @@ package com.proyecto.android_spacecraft_game;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 
 public class EnemyShot {
 
@@ -21,6 +22,7 @@ public class EnemyShot {
     private float positionX;
     private float positionY;
     private Bitmap spriteEnemyShot;
+    private Bitmap spriteEnemyShot2;
     private boolean isJumping;
 
 
@@ -31,6 +33,7 @@ public class EnemyShot {
         //Getting bitmap from resource
         Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bal_enemigo2);
         spriteEnemyShot = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
+        spriteEnemyShot2 = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         positionX = enemyShip.getPositionX() + spriteEnemyShot.getWidth();
         positionY = enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
         this.maxX = screenWidth;
@@ -105,7 +108,15 @@ public class EnemyShot {
         if (speed < MIN_SPEED) {
             speed = MIN_SPEED;
         }
-        positionX -= speed;
+        if(enemyShip.isAlive()){
+            setSpriteEnemyShot(spriteEnemyShot2);
+            positionX -= speed;
+        }
+        else{
+            Bitmap destroyed = spriteEnemyShot;
+            destroyed.eraseColor(Color.TRANSPARENT);
+            setSpriteEnemyShot(destroyed);
+        }
         if (positionX < 0) {
             positionX = enemyShip.getPositionX();
         }

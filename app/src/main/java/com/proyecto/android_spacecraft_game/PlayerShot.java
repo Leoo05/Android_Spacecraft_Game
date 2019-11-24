@@ -12,7 +12,7 @@ public class PlayerShot {
     public static final int SPRITE_SIZE_HEIGTH=5;
     public static final float GRAVITY_FORCE=10;
     private final int MIN_SPEED = 1;
-    private final int MAX_SPEED = 20;
+    private final int MAX_SPEED = 50;
     private SpaceShip spaceShip;
     private float maxY;
     private float maxX;
@@ -21,18 +21,17 @@ public class PlayerShot {
     private float positionX;
     private float positionY;
     private Bitmap spritePlayerShot;
-    private boolean isJumping;
+    private boolean isActive = false;
 
 
     public PlayerShot (Context context, float screenWidth, float screenHeigth, SpaceShip spaceShip){
         this.spaceShip =spaceShip;
-        speed = 20;
-        isJumping = false;
+        speed = 50;
         //Getting bitmap from resource
         Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.bala_personaje);
         spritePlayerShot = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         positionX = spaceShip.getPositionX()+ spritePlayerShot.getWidth();
-        positionY = spaceShip.getPositionY();
+        positionY = spaceShip.getPositionY()+ (spaceShip.getSpriteSpaceShip().getHeight() / 2);
         this.maxX = screenWidth;
         this.maxY = screenHeigth - spritePlayerShot.getHeight();
     }
@@ -88,12 +87,12 @@ public class PlayerShot {
         this.spritePlayerShot = spritePlayerShot;
     }
 
-    public boolean isJumping() {
-        return isJumping;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setJumping(boolean jumping) {
-        isJumping = jumping;
+    public void setActive(boolean jumping) {
+        isActive = jumping;
     }
 
     /**
@@ -106,9 +105,16 @@ public class PlayerShot {
         if (speed < MIN_SPEED) {
             speed = MIN_SPEED;
         }
-        positionX += speed;
-
-        positionY= spaceShip.getPositionY();
+        if(isActive){
+            positionX += speed;
+        }
+        else{
+            positionY=spaceShip.getPositionY()+ (spaceShip.getSpriteSpaceShip().getHeight() / 2);
+        }
+        if(positionX>maxX){
+            positionX=spaceShip.getPositionX();
+            setActive(false);
+        }
     }
 
     public boolean checkMeteorColition(Meteor meteor){
