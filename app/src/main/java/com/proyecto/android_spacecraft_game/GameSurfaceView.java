@@ -22,39 +22,38 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
     private Meteor m1;
     private Meteor m2;
     private Meteor m3;
-    private Meteor m4;
     private EnemyShip e1;
     private EnemyShip e2;
     private EnemyShot enemyShot;
     private EnemyShot enemyShot2;
+    private SpaceShip player;
     private PlayerShot playerShot;
-
     private Canvas canvas;
     private SurfaceHolder holder;
-    private SpaceShip player;
     private Thread gameplayThread = null;
 
     /**
      * Contructor
+     *
      * @param context
      */
     public GameSurfaceView(Context context, float screenWidth, float screenHeight) {
         super(context);
-        this.screenHeight=screenHeight;
-        this.screenWidth=screenWidth;
-        player = new SpaceShip(context, screenWidth,screenHeight);
-        m1=new Meteor(context,screenWidth,screenHeight);
-        m2=new Meteor(context,screenWidth,screenHeight);
-        m3=new Meteor(context,screenWidth,screenHeight);
-        m4=new Meteor(context,screenWidth,screenHeight);
-        e1 = new EnemyShip(context,screenWidth,screenHeight);
-        e2 = new EnemyShip(context,screenWidth,screenHeight);
-        enemyShot = new EnemyShot(context,screenWidth,screenHeight,e1);
-        enemyShot2 = new EnemyShot(context,screenWidth,screenHeight,e2);
+        this.screenHeight = screenHeight;
+        this.screenWidth = screenWidth;
+        player = new SpaceShip(context, screenWidth, screenHeight);
+        playerShot = new PlayerShot(context, screenWidth, screenHeight, player);
+        m1 = new Meteor(context, screenWidth, screenHeight);
+        m2 = new Meteor(context, screenWidth, screenHeight);
+        m3 = new Meteor(context, screenWidth, screenHeight);
+        e1 = new EnemyShip(context, screenWidth, screenHeight);
+        e2 = new EnemyShip(context, screenWidth, screenHeight);
+        enemyShot = new EnemyShot(context, screenWidth, screenHeight, e1);
+        enemyShot2 = new EnemyShot(context, screenWidth, screenHeight, e2);
         holder = getHolder();
-        paint= new Paint();
-        startCheking=false;
-        isPlaying=true;
+        paint = new Paint();
+        startCheking = false;
+        isPlaying = true;
     }
 
     /**
@@ -73,38 +72,30 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         m1.updateInfo();
         m2.updateInfo();
         m3.updateInfo();
-        m4.updateInfo();
         e1.updateInfo();
         e2.updateInfo();
         enemyShot.updateInfo();
         enemyShot2.updateInfo();
-        if(playerShot==null){
-
-        }else{
-            playerShot.updateInfo();
-        }
-
+        playerShot.updateInfo();
     }
 
     private void paintFrame() {
-        if (holder.getSurface().isValid()){
+        if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
-            canvas.drawColor(Color.CYAN);
-            canvas.drawBitmap(player.getSpriteSpaceShip(),player.getPositionX(),player.getPositionY(),paint);
-            canvas.drawBitmap(m1.getSpriteMeteor(),m1.getPositionX(),m1.getPositionY(),paint);
-            canvas.drawBitmap(m2.getSpriteMeteor(),m2.getPositionX(),m2.getPositionY(),paint);
-            canvas.drawBitmap(m3.getSpriteMeteor(),m3.getPositionX(),m3.getPositionY(),paint);
-            canvas.drawBitmap(m4.getSpriteMeteor(),m4.getPositionX(),m4.getPositionY(),paint);
-            canvas.drawBitmap(e1.getSpriteEnemyShip(),e1.getPositionX(),e1.getPositionY(),paint);
-            canvas.drawBitmap(e2.getSpriteEnemyShip(),e2.getPositionX(),e2.getPositionY(),paint);
-            canvas.drawBitmap(enemyShot.getSpriteEnemyShot(),enemyShot.getPositionX(),enemyShot.getPositionY(),paint);
-            canvas.drawBitmap(enemyShot2.getSpriteEnemyShot(),enemyShot2.getPositionX(),enemyShot2.getPositionY(),paint);
+            canvas.drawColor(Color.BLACK);
+            canvas.drawBitmap(player.getSpriteSpaceShip(), player.getPositionX(), player.getPositionY(), paint);
+            canvas.drawBitmap(playerShot.getSpritePlayerShot(), playerShot.getPositionX(), playerShot.getPositionY(), paint);
+            canvas.drawBitmap(m1.getSpriteMeteor(), m1.getPositionX(), m1.getPositionY(), paint);
+            canvas.drawBitmap(m2.getSpriteMeteor(), m2.getPositionX(), m2.getPositionY(), paint);
+            canvas.drawBitmap(m3.getSpriteMeteor(), m3.getPositionX(), m3.getPositionY(), paint);
+            canvas.drawBitmap(e1.getSpriteEnemyShip(), e1.getPositionX(), e1.getPositionY(), paint);
+            canvas.drawBitmap(e2.getSpriteEnemyShip(), e2.getPositionX(), e2.getPositionY(), paint);
+            canvas.drawBitmap(enemyShot.getSpriteEnemyShot(), enemyShot.getPositionX(), enemyShot.getPositionY(), paint);
+            canvas.drawBitmap(enemyShot2.getSpriteEnemyShot(), enemyShot2.getPositionX(), enemyShot2.getPositionY(), paint);
 //            canvas.drawText(gameManager.getScore(), gameManager.getX(), gameManager.getY(), paint);
             holder.unlockCanvasAndPost(canvas);
-
         }
     }
-
 
     public void pause() {
         isPlaying = false;
@@ -116,7 +107,6 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
     }
 
 
-
     public void resume() {
         isPlaying = true;
         gameplayThread = new Thread(this);
@@ -125,6 +115,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
 
     /**
      * Detect the action of the touch event
+     *
      * @param motionEvent
      * @return
      */
@@ -134,7 +125,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_UP:
                 System.out.println("TOUCH UP - STOP JUMPING");
                 player.setJumping(false);
-                startCheking=true;
+                startCheking = true;
                 break;
             case MotionEvent.ACTION_DOWN:
                 System.out.println("TOUCH DOWN - JUMP");
@@ -142,8 +133,8 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
                 break;
             case MotionEvent.ACTION_BUTTON_PRESS:
                 System.out.println("SHOOT");
-                playerShot = new PlayerShot(getContext(),screenWidth,screenHeight,player);
-                canvas.drawBitmap(playerShot.getSpritePlayerShot(),playerShot.getPositionX(),enemyShot2.getPositionY(),paint);
+                playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);
+                canvas.drawBitmap(playerShot.getSpritePlayerShot(), playerShot.getPositionX(), enemyShot2.getPositionY(), paint);
         }
         return true;
     }

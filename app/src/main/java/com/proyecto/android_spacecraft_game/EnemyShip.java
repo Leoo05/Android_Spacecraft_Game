@@ -25,7 +25,6 @@ public class EnemyShip {
 
 
     public EnemyShip(Context context, float screenWidth, float screenHeigth){
-
         speed = 0.09F;
         isJumping = false;
         //Getting bitmap from resource
@@ -36,11 +35,9 @@ public class EnemyShip {
         positionX = this.maxX + spriteEnemyShip.getWidth();
         Random rnd = new Random();
         positionY =(float) rnd.nextInt((int) maxY);
-
     }
 
     public EnemyShip (Context context, float initialX, float initialY, float screenWidth, float screenHeigth){
-
         speed = 0.09F;
         Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo2);
         spriteEnemyShip = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
@@ -96,7 +93,7 @@ public class EnemyShip {
     }
 
     /**
-     * Control the position and behaviour of the icecream car
+     * Control the position and behaviour of the Enemy Ship
      */
     public void updateInfo () {
         if (speed > MAX_SPEED) {
@@ -118,5 +115,15 @@ public class EnemyShip {
         if (positionY > maxY) {
             positionY = maxY;
         }
+    }
+
+    public boolean checkPlayerColision(SpaceShip player){
+        if((positionY >= player.getPositionY() && positionY <= player.getPositionY() + player.getSpriteSpaceShip().getHeight()) ||
+                (positionY + spriteEnemyShip.getHeight() >= player.getPositionY() && positionY + spriteEnemyShip.getHeight() <= player.getPositionY() + player.getSpriteSpaceShip().getHeight())){
+            if(positionX >= player.getPositionX() && player.getPositionX() + positionX <= player.getSpriteSpaceShip().getWidth()){
+                return true;
+            }
+        }
+        return false;
     }
 }

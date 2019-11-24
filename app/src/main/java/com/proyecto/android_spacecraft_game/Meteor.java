@@ -9,8 +9,8 @@ import java.util.Random;
 public class Meteor {
 
     public static final float INIT_X =100;
-    public static final int SPRITE_SIZE_WIDTH =100;
-    public static final int SPRITE_SIZE_HEIGTH=100;
+    public static final int SPRITE_SIZE_WIDTH =50;
+    public static final int SPRITE_SIZE_HEIGTH=50;
     private final int MIN_SPEED = 5;
     private final int MAX_SPEED = 16;
 
@@ -118,5 +118,15 @@ public class Meteor {
         if (positionY > maxY) {
             positionY = maxY;
         }
+    }
+
+    public boolean checkPlayerColision(SpaceShip player){
+        if((positionY >= player.getPositionY() && positionY <= player.getPositionY() + player.getSpriteSpaceShip().getHeight()) ||
+                (positionY + spriteMeteor.getHeight() >= player.getPositionY() && positionY + spriteMeteor.getHeight() <= player.getPositionY() + player.getSpriteSpaceShip().getHeight())){
+            if(positionX >= player.getPositionX() && player.getPositionX() + positionX <= player.getSpriteSpaceShip().getWidth()){
+                return true;
+            }
+        }
+        return false;
     }
 }
