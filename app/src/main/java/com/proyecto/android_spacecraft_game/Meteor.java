@@ -129,4 +129,8 @@ public class Meteor {
         }
         return false;
     }
+
+    public void destroyMeteor(){
+        //Ponga aqui lo que sea para destruirlos o volver a empezar
+    }
 }

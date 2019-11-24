@@ -31,6 +31,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
     private Canvas canvas;
     private SurfaceHolder holder;
     private Thread gameplayThread = null;
+    private GameManager gameManager;
 
     /**
      * Contructor
@@ -50,6 +51,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         e2 = new EnemyShip(context, screenWidth, screenHeight);
         enemyShot = new EnemyShot(context, screenWidth, screenHeight, e1);
         enemyShot2 = new EnemyShot(context, screenWidth, screenHeight, e2);
+        gameManager = new GameManager(m1, m2, m3, e1, e2, enemyShot, enemyShot2, player, playerShot);
         holder = getHolder();
         paint = new Paint();
         startCheking = false;
@@ -77,6 +79,9 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         enemyShot.updateInfo();
         enemyShot2.updateInfo();
         playerShot.updateInfo();
+        gameManager.checkDetroyEnemy();
+        gameManager.checkEndGame();
+        gameManager.checkPlayerDmg();
     }
 
     private void paintFrame() {
@@ -92,7 +97,9 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             canvas.drawBitmap(e2.getSpriteEnemyShip(), e2.getPositionX(), e2.getPositionY(), paint);
             canvas.drawBitmap(enemyShot.getSpriteEnemyShot(), enemyShot.getPositionX(), enemyShot.getPositionY(), paint);
             canvas.drawBitmap(enemyShot2.getSpriteEnemyShot(), enemyShot2.getPositionX(), enemyShot2.getPositionY(), paint);
-//            canvas.drawText(gameManager.getScore(), gameManager.getX(), gameManager.getY(), paint);
+            paint.setColor(Color.WHITE);
+            canvas.drawText(gameManager.getScoreText(), 500, 50, paint);
+            canvas.drawText(gameManager.getHealtText(), 10, 50, paint);
             holder.unlockCanvasAndPost(canvas);
         }
     }
@@ -138,5 +145,4 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         }
         return true;
     }
-
 }

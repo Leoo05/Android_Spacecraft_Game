@@ -110,4 +110,24 @@ public class PlayerShot {
 
         positionY= spaceShip.getPositionY();
     }
+
+    public boolean checkMeteorColition(Meteor meteor){
+        if((positionY >= meteor.getPositionY() && positionY <= meteor.getPositionY() + meteor.getSpriteMeteor().getHeight()) ||
+                (positionY + spritePlayerShot.getHeight() >= meteor.getPositionY() && positionY + spritePlayerShot.getHeight() <= meteor.getPositionY() + meteor.getSpriteMeteor().getHeight())){
+            if(positionX >= meteor.getPositionX() && meteor.getPositionX() + positionX <= meteor.getSpriteMeteor().getWidth()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkEnemyShipColition(EnemyShip enemyShip){
+        if((positionY >= enemyShip.getPositionY() && positionY <= enemyShip.getPositionY() + enemyShip.getSpriteEnemyShip().getHeight()) ||
+                (positionY + spritePlayerShot.getHeight() >= enemyShip.getPositionY() && positionY + spritePlayerShot.getHeight() <= enemyShip.getPositionY() + enemyShip.getSpriteEnemyShip().getHeight())){
+            if(positionX >= enemyShip.getPositionX() && enemyShip.getPositionX() + positionX <= enemyShip.getSpriteEnemyShip().getWidth()){
+                return true;
+            }
+        }
+        return false;
+    }
 }

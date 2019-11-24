@@ -32,7 +32,7 @@ public class EnemyShot {
         Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bal_enemigo2);
         spriteEnemyShot = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         positionX = enemyShip.getPositionX() + spriteEnemyShot.getWidth();
-        positionY = enemyShip.getPositionY() + (spriteEnemyShot.getHeight() / 2);
+        positionY = enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
         this.maxX = screenWidth;
         this.maxY = screenHeigth - spriteEnemyShot.getHeight();
     }
@@ -44,7 +44,7 @@ public class EnemyShot {
         Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bal_enemigo2);
         spriteEnemyShot = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         this.maxX = screenWidth - (spriteEnemyShot.getWidth() / 2);
-        positionY = enemyShip.getPositionY() + (spriteEnemyShot.getHeight() / 2);
+        positionY = enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
     }
 
     public static float getInitX() {
@@ -109,7 +109,7 @@ public class EnemyShot {
         if (positionX < 0) {
             positionX = enemyShip.getPositionX();
         }
-        positionY = enemyShip.getPositionY() + (spriteEnemyShot.getHeight() / 2);
+        positionY = enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
     }
 
     public boolean checkPlayerColision(SpaceShip player){

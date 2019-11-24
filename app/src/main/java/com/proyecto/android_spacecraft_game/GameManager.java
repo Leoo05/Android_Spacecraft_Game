@@ -27,11 +27,37 @@ public class GameManager {
         this.playerShot = playerShot;
     }
 
-    public boolean checkPlayerDmg(){
-        return enemyShot.checkPlayerColision(player) || enemyShot2.checkPlayerColision(player);
+    public void checkDetroyEnemy(){
+        if(playerShot.checkMeteorColition(m1)){
+            m1.destroyMeteor();
+        }
+        if(playerShot.checkMeteorColition(m2)) {
+            m2.destroyMeteor();
+        }
+        if(playerShot.checkMeteorColition(m3)){
+            m3.destroyMeteor();
+        }
+        if(playerShot.checkEnemyShipColition(e1)){
+            e1.destroyEnemyShip();
+        }
+        if(playerShot.checkEnemyShipColition(e2)){
+            e2.destroyEnemyShip();
+        }
+    }
+
+    public void checkPlayerDmg(){
+        if (enemyShot.checkPlayerColision(player) || enemyShot2.checkPlayerColision(player))player.setHealt(player.getHealt() - 15);
     }
 
     public boolean checkEndGame(){
-        return m1.checkPlayerColision(player) || m2.checkPlayerColision(player) || m3.checkPlayerColision(player) || e1.checkPlayerColision(player) || e2.checkPlayerColision(player);
+        return m1.checkPlayerColision(player) || m2.checkPlayerColision(player) || m3.checkPlayerColision(player) || e1.checkPlayerColision(player) || e2.checkPlayerColision(player) || player.getHealt() <= 0;
+    }
+
+    public String getScoreText() {
+        return scoreText + player.getScore();
+    }
+
+    public String getHealtText() {
+        return healtText + player.getHealt();
     }
 }

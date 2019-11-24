@@ -126,4 +126,8 @@ public class EnemyShip {
         }
         return false;
     }
+
+    public void destroyEnemyShip(){
+        //Ponga aqui lo que sea para destruirlos o volver a empezar
+    }
 }
