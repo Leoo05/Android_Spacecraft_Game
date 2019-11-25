@@ -108,9 +108,9 @@ public class EnemyShot {
             speed = MIN_SPEED;
         }
             positionX -= speed;
-
         if (positionX < 0) {
             positionX = enemyShip.getPositionX();
+            positionY = enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
         }
     }
 
