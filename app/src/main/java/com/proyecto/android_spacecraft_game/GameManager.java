@@ -36,7 +36,11 @@ public class GameManager {
     public boolean checkEndGame(){
         return m1.checkPlayerColision(player) || m2.checkPlayerColision(player) || m3.checkPlayerColision(player) || e1.checkPlayerColision(player) || e2.checkPlayerColision(player) || player.getHealt() <= 0;
     }
-
+    public void checkPass(){
+        if(m1.getPositionX()<= 0 || m2.getPositionX()<= 0 || m3.getPositionX()<= 0 ||e1.getPositionX()<= 0 ||e2.getPositionX()<= 0 ){
+            player.setScore(player.getScore()-15);
+        }
+    }
     public String getScoreText() {
         return scoreText + player.getScore();
     }

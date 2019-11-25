@@ -89,6 +89,18 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             e2.destroyShip();
             player.setScore(player.getScore()+15);
         }
+        if(e1.checkPlayerColision(player)){
+
+        }
+        if(e2.checkPlayerColision(player)){
+
+        }
+        if(enemyShot.checkPlayerColision(player)){
+            enemyShot.hit();
+        }
+        if(enemyShot2.checkPlayerColision(player)){
+            enemyShot2.hit();
+        }
     }
 
     private void updateInfo() {
@@ -101,10 +113,16 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         enemyShot.updateInfo();
         enemyShot2.updateInfo();
         playerShot.updateInfo();
-        checkCollision();
+        if(startCheking){
+            gameManager.checkPlayerDmg();
+            gameManager.checkPass();
+            if(gameManager.checkEndGame() || player.getHealt()<=0){
+                isPlaying=false;
+            }
+            checkCollision();
+        }
         //gameManager.checkDetroyEnemy();
-        gameManager.checkPlayerDmg();
-        gameManager.checkEndGame();
+
     }
 
     private void paintFrame() {
@@ -155,10 +173,11 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_UP:
                 System.out.println("TOUCH UP - STOP JUMPING");
                 player.setJumping(false);
-                startCheking = true;
                 break;
             case MotionEvent.ACTION_DOWN:
                 System.out.println("TOUCH DOWN - JUMP");
+                startCheking = true;
+                isPlaying=true;
                 player.setJumping(true);
                 if(!playerShot.isActive()) {
                     this.playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);

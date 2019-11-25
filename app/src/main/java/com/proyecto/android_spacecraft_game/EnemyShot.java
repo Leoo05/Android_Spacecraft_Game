@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.util.Random;
+
 public class EnemyShot {
 
     public static final float INIT_X = 100;
@@ -110,6 +112,11 @@ public class EnemyShot {
         if (positionX < 0) {
             positionX = enemyShip.getPositionX();
         }
+    }
+
+
+    public void hit(){
+        positionX = enemyShip.getPositionX();
         positionY = (int) enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
     }
 
