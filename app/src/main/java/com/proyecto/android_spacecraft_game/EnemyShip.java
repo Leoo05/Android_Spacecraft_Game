@@ -9,11 +9,11 @@ import java.util.Random;
 
 public class EnemyShip {
 
-    public static final float INIT_X =100;
-    public static final int SPRITE_SIZE_WIDTH =100;
-    public static final int SPRITE_SIZE_HEIGTH=100;
+    public static final float INIT_X = 100;
+    public static final int SPRITE_SIZE_WIDTH = 100;
+    public static final int SPRITE_SIZE_HEIGTH = 100;
     private final int MIN_SPEED = 5;
-    private final int MAX_SPEED = 7;
+    private final int MAX_SPEED = 9;
 
     private float maxY;
     private float maxX;
@@ -22,35 +22,31 @@ public class EnemyShip {
     private float positionX;
     private float positionY;
     private Bitmap spriteEnemyShip;
-    private Bitmap spriteEnemyShip2;
     private boolean isAlive;
-    private Context context;
 
 
-    public EnemyShip(Context context, float screenWidth, float screenHeigth){
+    public EnemyShip(Context context, float screenWidth, float screenHeigth) {
         speed = 0.09F;
         isAlive = true;
-        this.context = context;
         //Getting bitmap from resource
-        Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo2);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo2);
         spriteEnemyShip = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
-        spriteEnemyShip2 = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         this.maxX = screenWidth;
         this.maxY = screenHeigth - spriteEnemyShip.getHeight();
         positionX = this.maxX + spriteEnemyShip.getWidth();
         Random rnd = new Random();
-        positionY =(float) rnd.nextInt((int) maxY);
+        positionY = (float) rnd.nextInt((int) maxY);
     }
 
-    public EnemyShip (Context context, float initialX, float initialY, float screenWidth, float screenHeigth){
+    public EnemyShip(Context context, float initialX, float initialY, float screenWidth, float screenHeigth) {
         speed = 0.09F;
-        Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo2);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemigo2);
         spriteEnemyShip = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
-        this.positionX=initialX;
-        this.positionY=initialY;
-        this.maxX = screenWidth + spriteEnemyShip.getWidth();
-        this.maxY = screenHeigth - spriteEnemyShip.getHeight();
-
+        this.positionX = initialX;
+        this.positionY = initialY;
+        this.isAlive = true;
+        this.maxX = screenWidth;
+        this.maxY = screenHeigth - SPRITE_SIZE_HEIGTH;
     }
 
     public static float getInitX() {
@@ -100,47 +96,37 @@ public class EnemyShip {
     /**
      * Control the position and behaviour of the Enemy Ship
      */
-    public void updateInfo () {
+    public void updateInfo() {
         if (speed > MAX_SPEED) {
             speed = MAX_SPEED;
         }
-
-        if (speed < MIN_SPEED || speed ==0) {
+        if (speed < MIN_SPEED || speed == 0) {
             speed = MIN_SPEED;
         }
         this.positionX -= speed;
         if (positionX < 0) {
-            isAlive = true;
             Random rnd = new Random();
-            positionX = maxX+SPRITE_SIZE_WIDTH;
-            positionY =(float) rnd.nextInt((int) maxY);
-            setSpriteEnemyShip(spriteEnemyShip2);
-            speed=rnd.nextInt(8);
-        }
-        if(!isAlive){
-            Bitmap destroyed = getSpriteEnemyShip();
-            destroyed.eraseColor(Color.TRANSPARENT);
-            setSpriteEnemyShip(destroyed);
-        }
-        if (positionY < 0) {
-            positionY = 0;
-        }
-        if (positionY > maxY) {
-            positionY = maxY;
+            positionX = maxX + SPRITE_SIZE_WIDTH;
+            positionY = (float) rnd.nextInt((int) maxY);
+            speed = rnd.nextInt(8);
         }
     }
 
-    public boolean checkPlayerColision(SpaceShip player){
-        if((positionY >= player.getPositionY() && positionY <= player.getPositionY() + player.getSpriteSpaceShip().getHeight()) ||
-                (positionY + spriteEnemyShip.getHeight() >= player.getPositionY() && positionY + spriteEnemyShip.getHeight() <= player.getPositionY() + player.getSpriteSpaceShip().getHeight())){
-            if(positionX >= player.getPositionX() && player.getPositionX() + positionX <= player.getSpriteSpaceShip().getWidth()){
+    public void destroyShip(){
+        Random rnd = new Random();
+        positionX = maxX + SPRITE_SIZE_WIDTH;
+        positionY = (float) rnd.nextInt((int) maxY);
+        speed = rnd.nextInt(8);
+    }
+
+    public boolean checkPlayerColision(SpaceShip player) {
+        if ((positionY >= player.getPositionY() && positionY <= player.getPositionY() + player.getSpriteSpaceShip().getHeight()) ||
+                (positionY + SPRITE_SIZE_HEIGTH >= player.getPositionY() && positionY + SPRITE_SIZE_HEIGTH <= player.getPositionY() + player.getSpriteSpaceShip().getHeight())) {
+            if (positionX >= player.getPositionX() && player.getPositionX() + positionX <= player.getSpriteSpaceShip().getWidth()) {
                 return true;
             }
         }
         return false;
     }
 
-    public void destroyEnemyShip(){
-
-    }
 }

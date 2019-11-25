@@ -3,7 +3,6 @@ package com.proyecto.android_spacecraft_game;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 
 public class EnemyShot {
 
@@ -17,23 +16,21 @@ public class EnemyShot {
     private EnemyShip enemyShip;
     private float maxY;
     private float maxX;
+    private boolean isActive;
 
     private float speed = 0;
     private float positionX;
     private float positionY;
     private Bitmap spriteEnemyShot;
-    private Bitmap spriteEnemyShot2;
-    private boolean isJumping;
 
 
     public EnemyShot(Context context, float screenWidth, float screenHeigth, EnemyShip enemyShip) {
         this.enemyShip = enemyShip;
-        speed = 20;
-        isJumping = false;
+        speed = enemyShip.getSpeed() + 20;
+        isActive = false;
         //Getting bitmap from resource
         Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bal_enemigo2);
         spriteEnemyShot = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
-        spriteEnemyShot2 = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
         positionX = enemyShip.getPositionX() + spriteEnemyShot.getWidth();
         positionY = enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
         this.maxX = screenWidth;
@@ -41,7 +38,7 @@ public class EnemyShot {
     }
 
     public EnemyShot(Context context, float initialX, float initialY, float screenWidth, float screenHeigth) {
-        speed = 1;
+        speed = enemyShip.getSpeed() + 20;
         positionX = initialX;
         positionY = initialY;
         Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bal_enemigo2);
@@ -90,12 +87,12 @@ public class EnemyShot {
         this.spriteEnemyShot = spriteEnemyShot;
     }
 
-    public boolean isJumping() {
-        return isJumping;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setJumping(boolean jumping) {
-        isJumping = jumping;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     /**
@@ -108,19 +105,16 @@ public class EnemyShot {
         if (speed < MIN_SPEED) {
             speed = MIN_SPEED;
         }
-        if(enemyShip.isAlive()){
-            setSpriteEnemyShot(spriteEnemyShot2);
+        if(isActive){
             positionX -= speed;
-        }
-        else{
-            Bitmap destroyed = spriteEnemyShot;
-            destroyed.eraseColor(Color.TRANSPARENT);
-            setSpriteEnemyShot(destroyed);
+        } else {
+            positionX = enemyShip.getPositionX();
+            positionY = (int) enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
         }
         if (positionX < 0) {
             positionX = enemyShip.getPositionX();
         }
-        positionY = enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
+        positionY = (int) enemyShip.getPositionY() + (enemyShip.getSpriteEnemyShip().getHeight() / 2);
     }
 
     public boolean checkPlayerColision(SpaceShip player){

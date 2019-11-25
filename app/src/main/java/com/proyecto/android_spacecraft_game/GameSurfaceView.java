@@ -51,7 +51,6 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         e2 = new EnemyShip(context, screenWidth, screenHeight);
         enemyShot = new EnemyShot(context, screenWidth, screenHeight, e1);
         enemyShot2 = new EnemyShot(context, screenWidth, screenHeight, e2);
-        playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);
         gameManager = new GameManager(m1, m2, m3, e1, e2, enemyShot, enemyShot2, player, playerShot);
         holder = getHolder();
         paint = new Paint();
@@ -65,29 +64,33 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (isPlaying) {
-            checkCollision();
             updateInfo();
             paintFrame();
-
         }
     }
     private void checkCollision(){
-        if(playerShot.checkEnemyShipColition(e1)) {
-            e1.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
-        }
-        if(playerShot.checkEnemyShipColition(e2)) {
-            e2.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
-        }
         if(playerShot.checkMeteorColition(m1)){
-            m1.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+            m1.destroy();
+            player.setScore(player.getScore()+15);
         }
         if(playerShot.checkMeteorColition(m2)) {
-            m2.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+            m2.destroy();
+            player.setScore(player.getScore()+15);
         }
-        if(playerShot.checkMeteorColition(m3)) {
-            m3.setPositionX(screenWidth+e1.getSpriteEnemyShip().getWidth());
+        if(playerShot.checkMeteorColition(m3)){
+            m3.destroy();
+            player.setScore(player.getScore()+15);
+        }
+        if(playerShot.checkEnemyShipColition(e1)){
+            e1.destroyShip();
+            player.setScore(player.getScore()+15);
+        }
+        if(playerShot.checkEnemyShipColition(e2)){
+            e2.destroyShip();
+            player.setScore(player.getScore()+15);
         }
     }
+
     private void updateInfo() {
         player.updateInfo();
         m1.updateInfo();
@@ -98,9 +101,10 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         enemyShot.updateInfo();
         enemyShot2.updateInfo();
         playerShot.updateInfo();
-        gameManager.checkDetroyEnemy();
-        gameManager.checkEndGame();
+        checkCollision();
+        //gameManager.checkDetroyEnemy();
         gameManager.checkPlayerDmg();
+        gameManager.checkEndGame();
     }
 
     private void paintFrame() {
@@ -108,7 +112,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             canvas = holder.lockCanvas();
             canvas.drawColor(Color.BLACK);
             canvas.drawBitmap(player.getSpriteSpaceShip(), player.getPositionX(), player.getPositionY(), paint);
-            canvas.drawBitmap(playerShot.getSpritePlayerShot(), playerShot.getPositionX(), playerShot.getPositionY(), paint);
+            if(playerShot.isActive())canvas.drawBitmap(playerShot.getSpritePlayerShot(), playerShot.getPositionX(), playerShot.getPositionY(), paint);
             canvas.drawBitmap(m1.getSpriteMeteor(), m1.getPositionX(), m1.getPositionY(), paint);
             canvas.drawBitmap(m2.getSpriteMeteor(), m2.getPositionX(), m2.getPositionY(), paint);
             canvas.drawBitmap(m3.getSpriteMeteor(), m3.getPositionX(), m3.getPositionY(), paint);
@@ -156,14 +160,10 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
                 System.out.println("TOUCH DOWN - JUMP");
                 player.setJumping(true);
-                if(!playerShot.isActive()){
-                    playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);
-                    playerShot.setActive(true);
-                    canvas.drawBitmap(playerShot.getSpritePlayerShot(), playerShot.getPositionX(), player.getPositionY(), paint);
-                }else{
-
+                if(!playerShot.isActive()) {
+                    this.playerShot = new PlayerShot(getContext(), screenWidth, screenHeight, player);
+                    this.playerShot.setActive(true);
                 }
-
                 break;
         }
         return true;

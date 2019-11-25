@@ -27,31 +27,10 @@ public class GameManager {
         this.playerShot = playerShot;
     }
 
-    public void checkDetroyEnemy(){
-        if(playerShot.checkMeteorColition(m1)){
-            m1.setAlive(false);
-            player.setScore(player.getScore()+15);
-        }
-        if(playerShot.checkMeteorColition(m2)) {
-            m2.setAlive(false);
-            player.setScore(player.getScore()+15);
-        }
-        if(playerShot.checkMeteorColition(m3)){
-            m3.setAlive(false);
-            player.setScore(player.getScore()+15);
-        }
-        if(playerShot.checkEnemyShipColition(e1)){
-            e1.setAlive(false);
-            player.setScore(player.getScore()+15);
-        }
-        if(playerShot.checkEnemyShipColition(e2)){
-            e2.setAlive(false);
-            player.setScore(player.getScore()+15);
-        }
-    }
-
     public void checkPlayerDmg(){
-        if (enemyShot.checkPlayerColision(player) || enemyShot2.checkPlayerColision(player))player.setHealt(player.getHealt() - 15);
+        if (enemyShot.checkPlayerColision(player) || enemyShot2.checkPlayerColision(player)){
+            player.setHealt(player.getHealt() - 15);
+        }
     }
 
     public boolean checkEndGame(){

@@ -6,11 +6,11 @@ import android.graphics.BitmapFactory;
 
 public class PlayerShot {
 
-    public static final float INIT_X =100;
-    public static final float INIT_Y =100;
-    public static final int SPRITE_SIZE_WIDTH =25;
-    public static final int SPRITE_SIZE_HEIGTH=5;
-    public static final float GRAVITY_FORCE=10;
+    public static final float INIT_X = 100;
+    public static final float INIT_Y = 100;
+    public static final int SPRITE_SIZE_WIDTH = 25;
+    public static final int SPRITE_SIZE_HEIGTH = 5;
+    public static final float GRAVITY_FORCE = 10;
     private final int MIN_SPEED = 1;
     private final int MAX_SPEED = 50;
     private SpaceShip spaceShip;
@@ -24,25 +24,25 @@ public class PlayerShot {
     private boolean isActive = false;
 
 
-    public PlayerShot (Context context, float screenWidth, float screenHeigth, SpaceShip spaceShip){
-        this.spaceShip =spaceShip;
+    public PlayerShot(Context context, float screenWidth, float screenHeigth, SpaceShip spaceShip) {
+        this.spaceShip = spaceShip;
         speed = 50;
         //Getting bitmap from resource
-        Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.bala_personaje);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bala_personaje);
         spritePlayerShot = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
-        positionX = spaceShip.getPositionX()+ spritePlayerShot.getWidth();
-        positionY = spaceShip.getPositionY()+ (spaceShip.getSpriteSpaceShip().getHeight() / 2);
+        positionX = spaceShip.getPositionX() + spritePlayerShot.getWidth();
+        positionY = spaceShip.getPositionY() + (spaceShip.getSpriteSpaceShip().getHeight() / 2);
         this.maxX = screenWidth;
         this.maxY = screenHeigth - spritePlayerShot.getHeight();
     }
 
-    public PlayerShot (Context context, float initialX, float initialY, float screenWidth, float screenHeigth){
-        speed = 1;
+    public PlayerShot(Context context, float initialX, float initialY, float screenWidth, float screenHeigth) {
+        speed = 50;
         positionX = initialX;
         positionY = initialY;
-        Bitmap originalBitmap= BitmapFactory.decodeResource(context.getResources(), R.drawable.bala_personaje);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bala_personaje);
         spritePlayerShot = Bitmap.createScaledBitmap(originalBitmap, SPRITE_SIZE_WIDTH, SPRITE_SIZE_HEIGTH, false);
-        this.maxX = screenWidth - (spritePlayerShot.getWidth()/2);
+        this.maxX = screenWidth - (spritePlayerShot.getWidth() / 2);
         this.maxY = screenHeigth - spritePlayerShot.getHeight();
 
     }
@@ -91,46 +91,45 @@ public class PlayerShot {
         return isActive;
     }
 
-    public void setActive(boolean jumping) {
-        isActive = jumping;
+    public void setActive(boolean action) {
+        isActive = action;
     }
 
     /**
      * Control the position and behaviour of the icecream car
      */
-    public void updateInfo () {
+    public void updateInfo() {
         if (speed > MAX_SPEED) {
             speed = MAX_SPEED;
         }
         if (speed < MIN_SPEED) {
             speed = MIN_SPEED;
         }
-        if(isActive){
+        if (isActive) {
             positionX += speed;
+        } else {
+            positionY = (int) spaceShip.getPositionY() + (spaceShip.getSpriteSpaceShip().getHeight() / 2);
         }
-        else{
-            positionY=spaceShip.getPositionY()+ (spaceShip.getSpriteSpaceShip().getHeight() / 2);
-        }
-        if(positionX>maxX){
-            positionX=spaceShip.getPositionX();
-            setActive(false);
+        if (positionX >= maxX) {
+            positionX = spaceShip.getPositionX();
+            isActive = false;
         }
     }
 
-    public boolean checkMeteorColition(Meteor meteor){
-        if((positionY >= meteor.getPositionY() && positionY <= meteor.getPositionY() + meteor.getSpriteMeteor().getHeight()) ||
-                (positionY + spritePlayerShot.getHeight() >= meteor.getPositionY() && positionY + spritePlayerShot.getHeight() <= meteor.getPositionY() + meteor.getSpriteMeteor().getHeight())){
-            if(positionX >= meteor.getPositionX() && meteor.getPositionX() + positionX <= meteor.getSpriteMeteor().getWidth()){
+    public boolean checkMeteorColition(Meteor meteor) {
+        if ((positionY >= meteor.getPositionY() && positionY <= meteor.getPositionY() + meteor.getSpriteMeteor().getHeight()) ||
+                (positionY + SPRITE_SIZE_HEIGTH >= meteor.getPositionY() && positionY + SPRITE_SIZE_HEIGTH <= meteor.getPositionY() + meteor.getSpriteMeteor().getHeight())) {
+            if (positionX >= meteor.getPositionX()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean checkEnemyShipColition(EnemyShip enemyShip){
-        if((positionY >= enemyShip.getPositionY() && positionY <= enemyShip.getPositionY() + enemyShip.getSpriteEnemyShip().getHeight()) ||
-                (positionY + spritePlayerShot.getHeight() >= enemyShip.getPositionY() && positionY + spritePlayerShot.getHeight() <= enemyShip.getPositionY() + enemyShip.getSpriteEnemyShip().getHeight())){
-            if(positionX >= enemyShip.getPositionX() && enemyShip.getPositionX() + positionX <= enemyShip.getSpriteEnemyShip().getWidth()){
+    public boolean checkEnemyShipColition(EnemyShip enemyShip) {
+        if ((positionY >= enemyShip.getPositionY() && positionY <= enemyShip.getPositionY() + enemyShip.getSpriteEnemyShip().getHeight()) ||
+                (positionY + SPRITE_SIZE_HEIGTH >= enemyShip.getPositionY() && positionY + SPRITE_SIZE_HEIGTH <= enemyShip.getPositionY() + enemyShip.getSpriteEnemyShip().getHeight())) {
+            if (positionX >= enemyShip.getPositionX()) {
                 return true;
             }
         }
